@@ -2,6 +2,7 @@ require('dotenv').config();
 var request = require('request');
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
+var fs = require('fs');
 const keys = require('./keys.js');
 
 var queryString = process.argv.slice(2); //splits args off of process.argv array
@@ -26,20 +27,20 @@ function processQuery(querString){
          }
       });
    }else if(querString[0] === 'spotify-this-song'){ //if they want spotify
-      
+
       spotify.search({ type: 'track', query: querString[1].replace(/\"/g,"") }, function(err, data) {  //format query
          if (err) {
             return console.log('Error occurred: ' + err);  //log errors
          }
          for(let i=0 ; i<data.tracks.items.length ; i++){
-             
-             console.log('');
+
+          console.log('');
              console.log(data.tracks.items[i].name); //display data
              console.log(data.tracks.items[i].artists[0].name);
              console.log(data.tracks.items[i].album.name);
              console.log(data.tracks.items[i].track_number);
-         }
-      });
+          }
+       });
    }else if (querString[0] === 'movie-this'){ //if they want OMDB
       /*
       * Title of the movie.
@@ -74,11 +75,17 @@ function processQuery(querString){
 
          });
    }
+   console.log('');
 }
 
 
 if(queryString[0] === 'do-what-it-says'){
-   
+   fs.readFile('random.txt', 'utf8', (err,data) => {
+      if (err) throw err;
+      for (let i=0 ; i<data.split('\n').length ; i++){
+         processQuery(data.split('\n')[i].split(' '));
+      }
+   });
 }else{
    processQuery(queryString);
 }

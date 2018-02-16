@@ -18,6 +18,7 @@
   "homepage": "https://github.com/HarryCaveMan/liri-node-app#readme",
   "dependencies": {
     "dotenv": "^5.0.0",
+    "fs": "0.0.1-security",
     "node-spotify-api": "^1.0.7",
     "node-twitter": "^0.5.3",
     "request": "^2.83.0",
